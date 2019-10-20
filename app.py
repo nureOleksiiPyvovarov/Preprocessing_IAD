@@ -146,6 +146,45 @@ def attribute_estimation(data):
     return data
 
 
+def attribute_norm_centr(arr, target):
+    datasets = dataFrame(arr, target)
+    avg_arr = attribute_avg(arr, target)
+    med_arr = attribute_med(arr, target)
+    for i in range(len(datasets)):
+        datasets[i] = datasets[i].drop('CLASS', 1)
+        for ind, column in enumerate(datasets[i].columns):
+            columnSeriesObj = datasets[i][column]
+            for j in range(len(columnSeriesObj.values)):
+                columnSeriesObj.values[j] = (columnSeriesObj.values[j] - avg_arr[i][ind]) / med_arr[i][ind]
+    return datasets
+
+
+def attribute_hyper_sphere(arr, target):
+    datasets = dataFrame(arr, target)
+    for i in range(len(datasets)):
+        datasets[i] = datasets[i].drop('CLASS', 1)
+        for ind, column in enumerate(datasets[i].columns):
+            columnSeriesObj = datasets[i][column]
+            max_value = max(columnSeriesObj.values)
+            min_value = min(columnSeriesObj.values)
+            for j in range(len(columnSeriesObj.values)):
+                columnSeriesObj.values[j] = (columnSeriesObj.values[j] - min_value) / (max_value - min_value)
+    return datasets
+
+
+def attribute_hyper_cube(arr, target):
+    datasets = dataFrame(arr, target)
+    for i in range(len(datasets)):
+        datasets[i] = datasets[i].drop('CLASS', 1)
+        for ind, column in enumerate(datasets[i].columns):
+            columnSeriesObj = datasets[i][column]
+            max_value = max(columnSeriesObj.values)
+            min_value = min(columnSeriesObj.values)
+            for j in range(len(columnSeriesObj.values)):
+                columnSeriesObj.values[j] = 2 * ((columnSeriesObj.values[j] - min_value) / (max_value - min_value)) - 1
+    return datasets
+
+
 print(attribute_avg(iris_data, data.target))
 print(attribute_med(iris_data, data.target))
 print(attribute_half_sum(iris_data, data.target))
@@ -153,3 +192,6 @@ print(attribute_mean_square(iris_data, data.target))
 print(attribute_avg_module(iris_data, data.target))
 print(attribute_swing(iris_data, data.target))
 print(attribute_estimation(attribute_mean_square(iris_data, data.target)))
+print(attribute_norm_centr(iris_data, data.target))
+print(attribute_hyper_sphere(iris_data, data.target))
+print(attribute_hyper_cube(iris_data, data.target))
