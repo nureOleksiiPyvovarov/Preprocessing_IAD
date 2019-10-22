@@ -185,6 +185,42 @@ def attribute_hyper_cube(arr, target):
     return datasets
 
 
+def recurrent_avg(data, med=None):
+    average_val = []
+    for i in range(len(data)):
+
+        if i == 0:
+            average_val.append(data[i])
+        else:
+            average_val.append(
+                average_val[i - 1] + (
+                    (1 / i) * (data[i] - average_val[i - 1]) if med is None
+                    else np.sign(data[i] - average_val[i - 1])))
+    return average_val
+
+
+def attribute_reccurent_avg(arr, target):
+    datasets = dataFrame(arr, target)
+    arr_n = []
+    for i in range(len(datasets)):
+        datasets[i] = datasets[i].drop('CLASS', 1)
+        for ind, column in enumerate(datasets[i].columns):
+            columnSeriesObj = datasets[i][column]
+            arr_n.append(recurrent_avg(columnSeriesObj.values))
+    return arr_n
+
+
+def attribute_reccurent_med(arr, target):
+    datasets = dataFrame(arr, target)
+    arr_n = []
+    for i in range(len(datasets)):
+        datasets[i] = datasets[i].drop('CLASS', 1)
+        for ind, column in enumerate(datasets[i].columns):
+            columnSeriesObj = datasets[i][column]
+            arr_n.append(recurrent_avg(columnSeriesObj.values, True))
+    return arr_n
+
+
 print(attribute_avg(iris_data, data.target))
 print(attribute_med(iris_data, data.target))
 print(attribute_half_sum(iris_data, data.target))
@@ -195,3 +231,5 @@ print(attribute_estimation(attribute_mean_square(iris_data, data.target)))
 print(attribute_norm_centr(iris_data, data.target))
 print(attribute_hyper_sphere(iris_data, data.target))
 print(attribute_hyper_cube(iris_data, data.target))
+print(attribute_reccurent_avg(iris_data, data.target))
+print(attribute_reccurent_med(iris_data, data.target))
