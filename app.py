@@ -6,7 +6,6 @@ from sklearn.datasets import load_iris
 
 data = load_iris()
 iris_data = data.data
-
 attributes = ['sepalLength', 'sepalWidth', 'petalLength', 'petalWidth', 'CLASS']
 
 
@@ -34,7 +33,7 @@ def dataFrame(arr, target):
     c_array.append(target)
     for item in range(len(attributes)):
         iris[attributes[item]] = c_array[item][:]
-    df = pd.DataFrame(iris, columns=attributes)
+    df = pd.DataFrame(iris, columns = attributes)
     datasets = {}
     by_class = df.groupby('CLASS')
     for groups, data in by_class:
@@ -188,7 +187,6 @@ def attribute_hyper_cube(arr, target):
 def recurrent_avg(data, med=None):
     average_val = []
     for i in range(len(data)):
-
         if i == 0:
             average_val.append(data[i])
         else:
@@ -221,15 +219,27 @@ def attribute_reccurent_med(arr, target):
     return arr_n
 
 
+print('Среднее значение:')
 print(attribute_avg(iris_data, data.target))
+print('Медиана:')
 print(attribute_med(iris_data, data.target))
+print('Полусумма крайних наблюдений:')
 print(attribute_half_sum(iris_data, data.target))
+print('Среднеквадратическое отклонение от среднего:')
 print(attribute_mean_square(iris_data, data.target))
+print('Средний модуль отклонений:')
 print(attribute_avg_module(iris_data, data.target))
+print('Расброс данных:')
 print(attribute_swing(iris_data, data.target))
+print('Дисперсия:')
 print(attribute_estimation(attribute_mean_square(iris_data, data.target)))
+print('Нормирование и центрирование:')
 print(attribute_norm_centr(iris_data, data.target))
+print('Гиперсфера:')
 print(attribute_hyper_sphere(iris_data, data.target))
+print('Гиперкуб:')
 print(attribute_hyper_cube(iris_data, data.target))
+print('Реккурентные соотношения среднего:')
 print(attribute_reccurent_avg(iris_data, data.target))
+print('Реккурентные соотношения медианы:')
 print(attribute_reccurent_med(iris_data, data.target))
