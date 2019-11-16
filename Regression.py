@@ -193,17 +193,18 @@ def sse(x, y, w, watch=False):
     return sse_
 
 
-df = pd.read_csv('./Data.dat', sep='\t', header=None)
+df = pd.read_csv('Data.dat', sep='\t', header=None)
 
 df.drop([4], axis=1, inplace=True)
 
 df.insert(0, 'X0', 1)
 
+print('RAW DATA',df)
+
 df.rename(columns={0: 'V', 1: 'F', 2: 'C', 3: 'M'}, inplace=True)
 
 data = np.asarray(df)
-
-# print(df.head())
+print('UPDATED DATA',data)
 
 
 # var 1
@@ -233,8 +234,8 @@ for i in range(len(data)):
 
     data[i][1] = V[i]
 
-data = np.delete(data, 0, axis=0)
-
+data = np.delete(data, (0), axis=0)
+print('DELETED DATA',data)
 x_1 = [[None for x in range(len(data))] for y in range(len(data[0]) - 1)]
 
 x_1 = trans(x_1)
@@ -259,6 +260,8 @@ ans_1 = mul(obr(mul(trans(x_1), x_1)), mul(trans(x_1), y_1, dem=3), dem=3)
 
 # Var 2
 # V(k)=a0 + a1 M(k-1) + a2 F(k-1) +a3 C(k)
+
+data = np.asarray(df)
 
 M = [None for x in range(len(data))]
 
@@ -310,6 +313,8 @@ ans_2 = mul(obr(mul(trans(x_2), x_2)), mul(trans(x_2), y_2, dem=3), dem=3)
 
 # M(k)=a0 + a1 C(k-1) + a2 V(k) + a3 F(k)
 
+data = np.asarray(df)
+
 C = [None for x in range(len(data))]
 
 for i in range(len(data)):
@@ -349,6 +354,8 @@ ans_3 = mul(obr(mul(trans(x_3), x_3)), mul(trans(x_3), y_3, dem=3), dem=3)
 # Var 4
 
 # F(k)=a0 + a1 M(k-1) + a2 V(k) + a3 C(k-1)
+
+data = np.asarray(df)
 
 C = [None for x in range(len(data))]
 
@@ -401,6 +408,7 @@ ans_4 = mul(obr(mul(trans(x_4), x_4)), mul(trans(x_4), y_4, dem=3), dem=3)
 
 # prepare for 5 var.
 
+data = np.asarray(df)
 
 M = [None for x in range(len(data))]
 
@@ -441,6 +449,8 @@ ans_5 = mul(obr(mul(trans(x_5), x_5)), mul(trans(x_5), y_5, dem=3), dem=3)
 # Var 6
 
 # F(k)=a0 + a1 V(k-1) + a2 C(k) + a3 M(k)
+
+data = np.asarray(df)
 
 V = [None for x in range(len(data))]
 
