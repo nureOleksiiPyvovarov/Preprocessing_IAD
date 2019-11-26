@@ -2,6 +2,16 @@ import numpy as np
 
 import pandas as pd
 
+df = pd.read_csv('Data.dat', sep='\t', header=None)
+
+df.drop([4], axis=1, inplace=True)
+
+df.insert(0, 'X0', 1)
+
+df.rename(columns={0: 'V', 1: 'F', 2: 'C', 3: 'M'}, inplace=True)
+
+data = np.asarray(df)
+
 
 def trans(mas, dem=2):
     if dem == 2:
@@ -17,12 +27,8 @@ def trans(mas, dem=2):
         trans = list()
         a = True
         for i in range(len(mas)):
-
             l = list()
-            a = True
-            while a:
-                l.append(mas[i])
-                a = False
+            l.append(mas[i])
             trans.append(l)
 
         return np.asarray(trans)
@@ -59,7 +65,7 @@ def mul(a, b, dem=2):
         return x
 
     else:
-        return 'Wrong data demensions'
+        return 'Wrong data dimensions'
 
 
 def sum_(a, b, dem=2):
@@ -84,7 +90,7 @@ def sum_(a, b, dem=2):
         return sum_mas
 
     else:
-        return 'Wrong data demensions'
+        return 'Wrong data dimensions'
 
 
 def func_a(a, k):
@@ -173,7 +179,7 @@ def obr(a):
     return x
 
 
-def sse(x, y, w, watch=False):
+def regression_equations(x, y, w):
     y_ans = [0 for i in range(len(x))]
 
     for i in range(len(x)):
@@ -184,27 +190,9 @@ def sse(x, y, w, watch=False):
     sse_ = 0
 
     for i in range(len(x)):
-
-        if watch == True:
-            print(y[i], ' ', y_ans[i])
-
         sse_ += (y[i] - y_ans[i]) ** 2
 
     return sse_
-
-
-df = pd.read_csv('Data.dat', sep='\t', header=None)
-
-df.drop([4], axis=1, inplace=True)
-
-df.insert(0, 'X0', 1)
-
-print('RAW DATA',df)
-
-df.rename(columns={0: 'V', 1: 'F', 2: 'C', 3: 'M'}, inplace=True)
-
-data = np.asarray(df)
-print('UPDATED DATA',data)
 
 
 # var 1
@@ -235,7 +223,6 @@ for i in range(len(data)):
     data[i][1] = V[i]
 
 data = np.delete(data, (0), axis=0)
-print('DELETED DATA',data)
 x_1 = [[None for x in range(len(data))] for y in range(len(data[0]) - 1)]
 
 x_1 = trans(x_1)
@@ -489,26 +476,31 @@ ans_6 = mul(obr(mul(trans(x_6), x_6)), mul(trans(x_6), y_6, dem=3), dem=3)
 # #Var 6 end
 
 
-print('1:\n', ans_1)
+print('Variant #1 Koef: ', ans_1)
 
-print('SSE:\n', sse(x_1, y_1, ans_1))
+print('RESULT FOR VARIANT #1: ', regression_equations(x_1, y_1, ans_1))
+print('---------------------------------------------')
 
-print('2:\n', ans_2)
+print('Variant #2 Koef: ', ans_2)
 
-print('SSE:\n', sse(x_2, y_2, ans_2))
+print('RESULT FOR VARIANT #2:  ', regression_equations(x_2, y_2, ans_2))
+print('---------------------------------------------')
 
-print('3:\n', ans_3)
+print('Variant #3 Koef: ', ans_3)
 
-print('SSE:\n', sse(x_3, y_3, ans_3))
+print('RESULT FOR VARIANT #3:  ', regression_equations(x_3, y_3, ans_3))
+print('---------------------------------------------')
 
-print('4:\n', ans_4)
+print('Variant #4 Koef: ', ans_4)
 
-print('SSE:\n', sse(x_4, y_4, ans_4))
+print('RESULT FOR VARIANT #4:  ', regression_equations(x_4, y_4, ans_4))
+print('---------------------------------------------')
 
-print('5:\n', ans_5)
+print('Variant #5 Koef: ', ans_5)
 
-print('SSE:\n', sse(x_5, y_5, ans_5))
+print('RESULT FOR VARIANT #5:  ', regression_equations(x_5, y_5, ans_5))
+print('---------------------------------------------')
 
-print('6:\n', ans_6)
+print('Variant #6 Koef: ', ans_6)
 
-print('SSE:\n', sse(x_6, y_6, ans_6))
+print('RESULT FOR VARIANT #6:  ', regression_equations(x_6, y_6, ans_6))
